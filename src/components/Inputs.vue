@@ -9,7 +9,8 @@
           class="form-control"
           id="source"
           aria-describedby="Начальная точка"
-          placeholder="Пункт А">
+          placeholder="Пункт А"
+          v-model="sourceAddress">
        </div>
        <div class="form-group col-12 col-md-4 px-1">
          <label for="source">{{TextPlaceholderDestinationAddress}}</label>
@@ -19,6 +20,7 @@
           id="destination"
           aria-describedby="Конечная точка"
           placeholder="Пункт Б"
+          v-model="destinationAddress"
         >
        </div>
        <div class="form-group col-12 col-md-2 px-1">
@@ -55,5 +57,20 @@ export default {
       default: ""
     }
   },
+  data() {
+    return {
+      sourceAddress: this.sourceAddress,
+      destinationAddress: this.destinationAddress,
+      coords: {},
+      calculatedDistance: null,
+      btnEnabled: false,
+      loading: false
+    }
+  },
+  methods: {
+   ClearInput: function(){
+      this.destinationAddress = this.destinationAddress = "";
+   }
+  }
 }
 </script>
