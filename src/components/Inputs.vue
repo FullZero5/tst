@@ -12,7 +12,7 @@
        </div>
        <div class="form-group col-12 col-md-2 px-1">
          <label>&nbsp;</label>
-         <button class="btn btn-primary w-100 is-primary pr-2" @click.prevent="calculate">Go</button>
+         <button class="btn btn-primary w-100 is-primary pr-2" @click.prevent="getDistance">Go</button>
        </div>
        <div class="form-group col-12 col-md-2 px-1">
          <label>&nbsp;</label>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import { mapActions } from "vuex";
 
 export default {
   name: 'InputsComponents',
@@ -39,38 +39,91 @@ export default {
     },
     sourceAddress: {
       type: String,
-      default: ""
+      default: () =>"Краснодар"
     },
     destinationAddress: {
       type: String,
-      default: ""
+      default: () =>"Сочи"
     }
   },
   data() {
     return {
-      sourceAddress: this.sourceAddress,
-      destinationAddress: this.destinationAddress,
-      coords: {},
-      calculatedDistance: null,
+      //sourceAddress: this.sourceAddress,
+      //destinationAddress: this.destinationAddress,
       btnEnabled: false,
       loading: false
     }
   },
   methods: {
+    ...mapActions(["addToItems"]),
     clearInput() {
       this.sourceAddress = this.destinationAddress = "";
     },
-    searchCoordinates(ref, address) {
-      if (!address) {
-        this.btnEnabled = false;
-        this.calculatedDistance = "";
-        delete this.coords[ref];
-        return;
-      }
-      this.loading = true;
+    getCoordinates(sity){
+      let geo = new google.maps.Geocoder();
+      return new Promise(function(resolve, reject) {
+          if (geo) {
+            geo.geocode({
+              'address': sity
+            }, function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK) {
+                resolve({
+                  lat: results[0].geometry.location.lat(),
+                  lng: results[0].geometry.location.lng(),
+                });
+              }
+              else {
+                reject(status);
+              }
+            });
+          }
+      });
     },
-    calculate() {
+    getDataTime(){
+      let date = new Date();
+      const options = { 
+       
+        month: '2-digit',
+        day: '2-digit',
+        hour:'2-digit',
+        minute: '2-digit',
+        hour12: false
+      };
+      return new Intl.DateTimeFormat('en-US', options).format(date).replace(/\//g,'/').replace(',','');
+    },
+    getDistance() {
+     
+     let data  =  Promise.all([
+    		 	this.getCoordinates(this.sourceAddress),
+    		 	this.getCoordinates(this.destinationAddress)
+  		 ])
+  		 .then(function (results) {
 
+    		  let origin = new google.maps.LatLng(results[0].lat, results[0].lng);
+    		  let destination = new google.maps.LatLng(results[1].lat, results[1].lng);
+    		  let service = new google.maps.DistanceMatrixService();
+    		  
+    		  return new Promise((resolve, reject)=>{
+    		    service.getDistanceMatrix({
+    		      origins: [origin],
+              destinations: [destination],
+              travelMode: "WALKING",
+              unitSystem: google.maps.UnitSystem.metric,
+              avoidHighways: false,
+              avoidTolls: false
+    		    },function(resp, status) {
+    		       resolve({
+                  coordinats: resp.rows[0].elements[0].distance,
+                  
+                });
+    		    })
+    		  })
+  		});
+      data.then((res) => {
+           this.addToItems(`<<${this.getDataTime()}>><< ${this.sourceAddress}>> => <<${this.destinationAddress}>> = ${res.coordinats.text} `)
+      }).catch((err) => {
+           this.addToItems(err);
+      })
     }
   },
 }
