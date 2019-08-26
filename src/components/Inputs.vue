@@ -48,8 +48,6 @@ export default {
   },
   data() {
     return {
-      //sourceAddress: this.sourceAddress,
-      //destinationAddress: this.destinationAddress,
       btnEnabled: false,
       loading: false
     }
