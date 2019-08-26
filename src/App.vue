@@ -1,7 +1,7 @@
 <template>
-  <div id="app" class="container">
-    <section class="column">
-       <button @click="addInput" class="btn btn-primary">+</button>
+  <div id="app" class="container ">
+    <section class="column text-left">
+       <button @click="addInput" class="btn btn-primary ">+</button>
     </section>  
     <section class="column">
      <Inputs
@@ -13,11 +13,19 @@
           :destinationAddress="path.destinationAddress"
      />
     </section>
+    <section class="column">
+      <h3>Журнал запросов:</h3>
+      <ul>
+        <li  v-for="(log, index) in getData" :key="index"> {{log}}</li>
+      </ul>
+   
+    </section>
   </div>
 </template>
 
 <script>
 import Inputs from './components/Inputs.vue';
+import { mapGetters } from "vuex";
 
 function makeIterator(array) {
   let nextIndex = 0;
@@ -49,6 +57,9 @@ export default {
       ]
     };
   },
+  computed: {
+    ...mapGetters(["getData"])
+  },
   methods: {
     addInput(){
       if(this.paths.length<4){
@@ -72,5 +83,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+li {
+    list-style-type: none;
 }
 </style>
