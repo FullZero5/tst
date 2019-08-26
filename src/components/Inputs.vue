@@ -4,9 +4,22 @@
      <div class="row">
        <div class="form-group col-12 col-md-4 px-1">
          <label for="source">Пункт А</label>
+         <input
+          type="text"
+          class="form-control"
+          id="source"
+          aria-describedby="Начальная точка"
+          placeholder="Пункт А">
        </div>
        <div class="form-group col-12 col-md-4 px-1">
          <label for="source">Пункт Б</label>
+         <input
+          type="text"
+          class="form-control"
+          id="destination"
+          aria-describedby="Конечная точка"
+          placeholder="Пункт Б"
+        >
        </div>
        <div class="form-group col-12 col-md-4 px-1">
          <label>&nbsp;</label>
@@ -14,7 +27,7 @@
        </div>
      </div>
    </form>
-   <section>
+   </section>
 </template>
 
 <script>
