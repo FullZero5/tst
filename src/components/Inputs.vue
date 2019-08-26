@@ -21,9 +21,13 @@
           placeholder="Пункт Б"
         >
        </div>
-       <div class="form-group col-12 col-md-4 px-1">
+       <div class="form-group col-12 col-md-2 px-1">
          <label>&nbsp;</label>
          <button class="btn btn-primary w-100 is-primary pr-2">Go</button>
+       </div>
+       <div class="form-group col-12 col-md-2 px-1"> 
+        <label>&nbsp;</label>
+        <button class="btn btn-primary w-100 is-primary pr-2">Clear</button>
        </div>
      </div>
    </form>
