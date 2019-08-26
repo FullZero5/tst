@@ -29,7 +29,9 @@
        </div>
        <div class="form-group col-12 col-md-2 px-1"> 
         <label>&nbsp;</label>
-        <button class="btn btn-primary w-100 is-primary pr-2">Clear</button>
+        <button class="btn btn-primary w-100 is-primary pr-2"
+        @click.prevent="ClearInput"
+        >Clear</button>
        </div>
      </div>
    </form>
@@ -69,7 +71,7 @@ export default {
   },
   methods: {
    ClearInput: function(){
-      this.destinationAddress = this.destinationAddress = "";
+      this.sourceAddress = this.destinationAddress = "";
    }
   }
 }
