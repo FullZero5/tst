@@ -3,7 +3,7 @@
    <form role="form">
      <div class="row">
        <div class="form-group col-12 col-md-4 px-1">
-         <label for="source">Пункт А</label>
+         <label for="source">{{TextPlaceholderSourceAddress}}</label>
          <input
           type="text"
           class="form-control"
@@ -12,7 +12,7 @@
           placeholder="Пункт А">
        </div>
        <div class="form-group col-12 col-md-4 px-1">
-         <label for="source">Пункт Б</label>
+         <label for="source">{{TextPlaceholderDestinationAddress}}</label>
          <input
           type="text"
           class="form-control"
@@ -34,7 +34,22 @@
 export default {
   name: 'InputsComponents',
   props: {
-    msg: String
-  }
+    TextPlaceholderSourceAddress: {
+      type: String,
+      default: "Пункт-A"
+    },
+    TextPlaceholderDestinationAddress: {
+      type: String,
+      default: "Пункт-Б"
+    },
+    sourceAddress: {
+      type: String,
+      default: ""
+    },
+    destinationAddress: {
+      type: String,
+      default: ""
+    }
+  },
 }
 </script>
