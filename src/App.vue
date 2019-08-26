@@ -9,6 +9,8 @@
           :key="index"
           :TextPlaceholderSourceAddress="path.titleSourceAddress"
           :TextPlaceholderDestinationAddress="path.titleDestinationAddress"
+          :sourceAddress="path.sourceAddress"
+          :destinationAddress="path.destinationAddress"
      />
     </section>
   </div>
