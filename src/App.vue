@@ -65,9 +65,9 @@ export default {
       if(this.paths.length<4){
         this.paths.push({
           titleSourceAddress: "Пункт-"+letter.next().value,
-          sourceAddress: "Красноадр",
+          sourceAddress: "Темрюк",
           titleDestinationAddress: "Пункт-"+letter.next().value,
-          destinationAddress: "Москва"
+          destinationAddress: "Сочи"
         });
       }
     }
