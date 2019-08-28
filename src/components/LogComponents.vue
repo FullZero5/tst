@@ -1,8 +1,12 @@
 <template>
- <section class="column">
+ <section class="column text-left">
      <h3>Журнал запросов:</h3>
-     <ul>
-         <li v-for="(log, index) in getLog" :key="index"> {{log}}</li>
+     <ul class="list-group list-group-flush">
+         <li v-for="(log, index) in getLog"
+           :key="index"
+           class="list-group-item"
+           :class="[(log.status) ? 'list-group-item-success':'list-group-item-warning']"
+         >{{log.text}}</li>
      </ul>
  </section>
 </template>
@@ -17,3 +21,4 @@ export default {
   }
 }
 </script>
+

@@ -1,12 +1,13 @@
 <template>
   <div id="app" class="container ">
     <app-Controls/>
-    <app-Distance  v-for="(path, index) in paths"  :key="index"/>
+    <app-Distance v-for="(path, index) in getPaths"  :key="index"/>
     <app-Log/>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import Controls from './components/ControlComponents.vue';
 import DistanceComponents from './components/DistanceComponents.vue';
 import LogComponents from './components/LogComponents.vue';
@@ -18,18 +19,8 @@ export default {
     appDistance:DistanceComponents,
     appLog:LogComponents
   },
-  data() {
-    return {
-      paths: []
-    };
-  },
-  created() {
-    this.addDistanceComponents();
-  },
-  methods: {
-    addDistanceComponents(){
-      this.paths.push({ sourceAddress: " ",destinationAddress: " "});
-    }
+  computed: {
+    ...mapGetters(["getPaths"])
   }
 }
 </script>
@@ -45,8 +36,5 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-}
-li {
-    list-style-type: none;
 }
 </style>

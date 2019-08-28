@@ -31,11 +31,11 @@ export default {
   props: {
     sourceAddress: {
       type: String,
-      default: ()=>"Краснодар"
+      default: () => "Краснодар"
     },
     destinationAddress: {
       type: String,
-      default: ()=>"Сочи"
+      default: () => "Сочи"
     }
   },
   data() {
@@ -45,73 +45,72 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["addToItems"]),
+    ...mapActions(["addToLog"]),
     clearInput() {
       this.sourceAddress = this.destinationAddress = "";
     },
-    getCoordinates(sity){
+    getCoordinates(sity) {
       let geo = new google.maps.Geocoder();
       return new Promise(function(resolve, reject) {
-          if (geo) {
-            geo.geocode({
-              'address': sity
-            }, function(results, status) {
-              if (status == google.maps.GeocoderStatus.OK) {
-                resolve({
-                  lat: results[0].geometry.location.lat(),
-                  lng: results[0].geometry.location.lng(),
-                });
-              }
-              else {
-                reject(status);
-              }
-            });
-          }
+        if (geo) {
+          geo.geocode({
+            'address': sity
+          }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              resolve({
+                lat: results[0].geometry.location.lat(),
+                lng: results[0].geometry.location.lng(),
+              });
+            }
+            else {
+              reject(status);
+            }
+          });
+        }
       });
     },
-    getDataTime(){
+    getDataTime() {
       let date = new Date();
-      const options = { 
-       
+      const options = {
         month: '2-digit',
         day: '2-digit',
-        hour:'2-digit',
+        hour: '2-digit',
         minute: '2-digit',
         hour12: false
       };
-      return new Intl.DateTimeFormat('en-US', options).format(date).replace(/\//g,'/').replace(',','');
+      return new Intl.DateTimeFormat('en-US', options).format(date).replace(/\//g, '/').replace(',', '');
     },
     getDistance() {
-     let data  =  Promise.all([
-    		 	this.getCoordinates(this.sourceAddress),
-    		 	this.getCoordinates(this.destinationAddress)
-  		 ])
-  		 .then(function (results) {
+      let data = Promise.all([
+          this.getCoordinates(this.sourceAddress),
+          this.getCoordinates(this.destinationAddress)
+        ])
+        .then(function(results) {
 
-    		  let origin = new google.maps.LatLng(results[0].lat, results[0].lng);
-    		  let destination = new google.maps.LatLng(results[1].lat, results[1].lng);
-    		  let service = new google.maps.DistanceMatrixService();
-    		  
-    		  return new Promise((resolve, reject)=>{
-    		    service.getDistanceMatrix({
-    		      origins: [origin],
+          let origin = new google.maps.LatLng(results[0].lat, results[0].lng);
+          let destination = new google.maps.LatLng(results[1].lat, results[1].lng);
+          let service = new google.maps.DistanceMatrixService();
+
+          return new Promise((resolve, reject) => {
+            service.getDistanceMatrix({
+              origins: [origin],
               destinations: [destination],
               travelMode: "WALKING",
               unitSystem: google.maps.UnitSystem.metric,
               avoidHighways: false,
               avoidTolls: false
-    		    },function(resp, status) {
-    		       resolve({
-                  coordinats: resp.rows[0].elements[0].distance,
-                  
-                });
-    		    })
-    		  })
-  		});
+            }, function(resp, status) {
+              resolve({
+                coordinats: resp.rows[0].elements[0].distance,
+
+              });
+            })
+          })
+        });
       data.then((res) => {
-           this.addToItems(`${this.getDataTime()} ${this.sourceAddress} => ${this.destinationAddress} = ${res.coordinats.text} `)
+        this.addToLog({text:`${this.getDataTime()} ${this.sourceAddress} => ${this.destinationAddress} = ${res.coordinats.text} `, status:true})
       }).catch((err) => {
-           this.addToItems(err);
+        this.addToLog({text:err, status:false});
       })
     }
   },
