@@ -4,11 +4,11 @@
      <div class="row">
        <div class="form-group col-12 col-md-4 px-1">
          <label for="source">Начальная точка</label>
-         <input type="text" class="form-control" id="source" aria-describedby="Начальная точка" placeholder="Начальная точка" v-model="sourceAddress" @blur="searchCoordinates('source', sourceAddress)">
+         <input type="text" class="form-control" id="source" aria-describedby="Начальная точка" placeholder="Начальная точка" v-model="sourceAddress">
        </div>
        <div class="form-group col-12 col-md-4 px-1">
          <label for="source">Конечная точка</label>
-         <input type="text" class="form-control" id="destination" aria-describedby="Конечная точка" placeholder="Конечная точка" v-model="destinationAddress" @blur="searchCoordinates('destination', destinationAddress)">
+         <input type="text" class="form-control" id="destination" aria-describedby="Конечная точка" placeholder="Конечная точка" v-model="destinationAddress">
        </div>
        <div class="form-group col-12 col-md-2 px-1">
          <label>&nbsp;</label>
@@ -29,20 +29,12 @@ import gmapsInit from '../utils/gmaps';
 
 export default {
   name: 'DistanceComponents',
-  props: {
-    sourceAddress: {
-      type: String,
-      default: () => "Краснодар"
-    },
-    destinationAddress: {
-      type: String,
-      default: () => "Сочи"
-    }
-  },
   data() {
     return {
       google: null,
       loading: false,
+      sourceAddress: "Краснодар",
+      destinationAddress:"Сочи"
     }
   },
   async mounted() {
@@ -59,24 +51,14 @@ export default {
       this.sourceAddress = this.destinationAddress = "";
     },
     getCoordinates(sity) {
-      let geo = new this.google.maps.Geocoder();
-      return new Promise(function(resolve, reject) {
-        if (geo) {
-          geo.geocode({
-            'address': sity
-          }, function(results, status) {
-            if (status == this.google.maps.GeocoderStatus.OK) {
-              resolve({
+      const geo = new this.google.maps.Geocoder();
+      return new Promise((resolve, reject) => geo
+          .geocode({'address': sity}, (results, status) => status === this.google.maps.GeocoderStatus.OK
+            ?resolve({
                 lat: results[0].geometry.location.lat(),
                 lng: results[0].geometry.location.lng(),
-              });
-            }
-            else {
-              reject(status);
-            }
-          });
-        }
-      });
+              }): reject(new Error(`Cannot find address`))
+          ));
     },
     getDataTime() {
       let date = new Date();
@@ -90,11 +72,12 @@ export default {
       return new Intl.DateTimeFormat('en-US', options).format(date).replace(/\//g, '/').replace(',', '');
     },
     getDistance() {
+      
       let data = Promise.all([
           this.getCoordinates(this.sourceAddress),
           this.getCoordinates(this.destinationAddress)
         ])
-        .then(function(results) {
+        .then(results =>{
 
           let origin = new google.maps.LatLng(results[0].lat, results[0].lng);
           let destination = new google.maps.LatLng(results[1].lat, results[1].lng);
@@ -108,19 +91,16 @@ export default {
               unitSystem: google.maps.UnitSystem.metric,
               avoidHighways: false,
               avoidTolls: false
-            }, function(resp, status) {
-              resolve({
-                coordinats: resp.rows[0].elements[0].distance,
-
-              });
-            })
-          })
+            },
+            (resp, status) => resolve({coordinats: resp.rows[0].elements[0].distance}));
+          });
         });
+      
       data.then((res) => {
-        this.addToLog({text:`${this.getDataTime()} ${this.sourceAddress} => ${this.destinationAddress} = ${res.coordinats.text} `, status:true})
+        this.addToLog({text:`${this.getDataTime()} ${this.sourceAddress} => ${this.destinationAddress} = ${res.coordinats.text} `, status:true});
       }).catch((err) => {
         this.addToLog({text:err, status:false});
-      })
+      });
     }
   },
 }
