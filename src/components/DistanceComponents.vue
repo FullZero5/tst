@@ -25,6 +25,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import gmapsInit from '../utils/gmaps';
 
 export default {
   name: 'DistanceComponents',
@@ -40,8 +41,16 @@ export default {
   },
   data() {
     return {
-      btnEnabled: false,
-      loading: false
+      google: null,
+      loading: false,
+    }
+  },
+  async mounted() {
+    try {
+      this.google = await gmapsInit();
+    }
+    catch (error) {
+      console.error(error);
     }
   },
   methods: {
@@ -50,13 +59,13 @@ export default {
       this.sourceAddress = this.destinationAddress = "";
     },
     getCoordinates(sity) {
-      let geo = new google.maps.Geocoder();
+      let geo = new this.google.maps.Geocoder();
       return new Promise(function(resolve, reject) {
         if (geo) {
           geo.geocode({
             'address': sity
           }, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
+            if (status == this.google.maps.GeocoderStatus.OK) {
               resolve({
                 lat: results[0].geometry.location.lat(),
                 lng: results[0].geometry.location.lng(),
@@ -95,7 +104,7 @@ export default {
             service.getDistanceMatrix({
               origins: [origin],
               destinations: [destination],
-              travelMode: "WALKING",
+              travelMode: "DRIVING",
               unitSystem: google.maps.UnitSystem.metric,
               avoidHighways: false,
               avoidTolls: false
