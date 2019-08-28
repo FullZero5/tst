@@ -3,12 +3,12 @@
    <form role="form">
      <div class="row">
        <div class="form-group col-12 col-md-4 px-1">
-         <label for="source">{{TextPlaceholderSourceAddress}}</label>
-         <input type="text" class="form-control" id="source" aria-describedby="Начальная точка" placeholder="Пункт А" v-model="sourceAddress" @blur="searchCoordinates('source', sourceAddress)">
+         <label for="source">Начальная точка</label>
+         <input type="text" class="form-control" id="source" aria-describedby="Начальная точка" placeholder="Начальная точка" v-model="sourceAddress" @blur="searchCoordinates('source', sourceAddress)">
        </div>
        <div class="form-group col-12 col-md-4 px-1">
-         <label for="source">{{TextPlaceholderDestinationAddress}}</label>
-         <input type="text" class="form-control" id="destination" aria-describedby="Конечная точка" placeholder="Пункт Б" v-model="destinationAddress" @blur="searchCoordinates('destination', destinationAddress)">
+         <label for="source">Конечная точка</label>
+         <input type="text" class="form-control" id="destination" aria-describedby="Конечная точка" placeholder="Конечная точка" v-model="destinationAddress" @blur="searchCoordinates('destination', destinationAddress)">
        </div>
        <div class="form-group col-12 col-md-2 px-1">
          <label>&nbsp;</label>
@@ -27,23 +27,15 @@
 import { mapActions } from "vuex";
 
 export default {
-  name: 'InputsComponents',
+  name: 'DistanceComponents',
   props: {
-    TextPlaceholderSourceAddress: {
-      type: String,
-      default: "Пункт-A"
-    },
-    TextPlaceholderDestinationAddress: {
-      type: String,
-      default: "Пункт-Б"
-    },
     sourceAddress: {
       type: String,
-      default: () =>"Краснодар"
+      default: ()=>"Краснодар"
     },
     destinationAddress: {
       type: String,
-      default: () =>"Сочи"
+      default: ()=>"Сочи"
     }
   },
   data() {
@@ -90,7 +82,6 @@ export default {
       return new Intl.DateTimeFormat('en-US', options).format(date).replace(/\//g,'/').replace(',','');
     },
     getDistance() {
-     
      let data  =  Promise.all([
     		 	this.getCoordinates(this.sourceAddress),
     		 	this.getCoordinates(this.destinationAddress)
@@ -118,7 +109,7 @@ export default {
     		  })
   		});
       data.then((res) => {
-           this.addToItems(`<<${this.getDataTime()}>><< ${this.sourceAddress}>> => <<${this.destinationAddress}>> = ${res.coordinats.text} `)
+           this.addToItems(`${this.getDataTime()} ${this.sourceAddress} => ${this.destinationAddress} = ${res.coordinats.text} `)
       }).catch((err) => {
            this.addToItems(err);
       })
