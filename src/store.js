@@ -8,7 +8,7 @@ export default new Vuex.Store({
    log: [],
   },
   getters: {
-    getData: state => state.log
+    getLog: state => state.log
   },
   mutations: {
    ADD_DATA: (state, item) => state.log.push(item)
