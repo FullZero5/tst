@@ -8,16 +8,12 @@ export default new Vuex.Store({
    log: [],
   },
   getters: {
-    getData: state => {
-      return state.log;
-    }
+    getData: state => state.log
   },
   mutations: {
-   ADD_DATA: (state, item) => {
-    state.log.push(item);
-   }
+   ADD_DATA: (state, item) => state.log.push(item)
   },
   actions: {
-   addToItems: ({ commit }, item) => commit("ADD_DATA", item),
+   addToItems: ({ commit }, item) => commit("ADD_DATA", item)
   }
 })
