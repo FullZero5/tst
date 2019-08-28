@@ -5,16 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-   data: [],
+   log: [],
   },
   getters: {
     getData: state => {
-      return state.data;
+      return state.log;
     }
   },
   mutations: {
    ADD_DATA: (state, item) => {
-    state.data.push(item);
+    state.log.push(item);
    }
   },
   actions: {
