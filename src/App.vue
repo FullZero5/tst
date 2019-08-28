@@ -1,37 +1,27 @@
 <template>
   <div id="app" class="container ">
-    <section class="column text-left">
-       <button @click.once="addDistanceComponents" class="btn btn-primary ">+</button>
-    </section>  
-    <section class="column">
-     <Inputs  v-for="(path, index) in paths"  :key="index"
-     />
-    </section>
-    <section class="column">
-      <h3>Журнал запросов:</h3>
-      <ul>
-        <li  v-for="(log, index) in getData" :key="index"> {{log}}</li>
-      </ul>
-    </section>
+    <app-Controls/>
+    <app-Distance  v-for="(path, index) in paths"  :key="index"/>
+    <app-Log/>
   </div>
 </template>
 
 <script>
-import Inputs from './components/DistanceComponents.vue';
-import { mapGetters } from "vuex";
+import Controls from './components/ControlComponents.vue';
+import DistanceComponents from './components/DistanceComponents.vue';
+import LogComponents from './components/LogComponents.vue';
 
 export default {
   name: 'app',
   components: {
-    Inputs
+    appControls:Controls,
+    appDistance:DistanceComponents,
+    appLog:LogComponents
   },
   data() {
     return {
       paths: []
     };
-  },
-  computed: {
-    ...mapGetters(["getData"])
   },
   created() {
     this.addDistanceComponents();

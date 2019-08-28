@@ -1,5 +1,5 @@
 <template>
- <section>
+ <section class="column">
    <form role="form">
      <div class="row">
        <div class="form-group col-12 col-md-4 px-1">
