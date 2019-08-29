@@ -32,7 +32,6 @@ export default {
   data() {
     return {
       google: null,
-      loading: false,
       sourceAddress: "Краснодар",
       destinationAddress:"Сочи"
     }
